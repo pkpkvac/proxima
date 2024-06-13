@@ -16,6 +16,9 @@ export type PokemonType =
 export interface Pokemon {
   id: number;
   name: string;
+  cries: {
+    legacy: string;
+  };
   sprites: {
     front_default: string;
     back_default: string;

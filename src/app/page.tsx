@@ -4,7 +4,7 @@ import ListB from "./components/ListB";
 import { Pokemon, PokemonList, PokemonProfile } from "./types";
 
 export default async function Home() {
-  const list: PokemonList = await listPokemon(100);
+  const list: PokemonList = await listPokemon(1000);
   const randomPokemon =
     list.results[Math.floor(Math.random() * list.results.length)];
 
@@ -16,7 +16,6 @@ export default async function Home() {
     })
   );
 
-  //   sort moves by power
   movesDetails.sort((a, b) => (a.power ?? 0) - (b.power ?? 0));
 
   const pokemonProfile: PokemonProfile = {
@@ -30,11 +29,7 @@ export default async function Home() {
   // }
 
   return (
-    <div className="min-h-screen max-h-full w-full flex flex-col gap-4 items-center justify-center bg-[#FCFCFC] p-20">
-      <h1 className="text-4xl font-bold text-center">
-        ProximaHQ Coding Challenge
-      </h1>
-      <p>Check out the instructions in the README.md</p>
+    <div className=" min-h-screen max-h-full w-full flex flex-col gap-4 items-center justify-center p-20">
       <div className="flex gap-4">
         <ListA pokemon={pokemonProfile} />
         <ListB pokemon={pokemonProfile} />
