@@ -150,7 +150,7 @@ const ListA: React.FC<ListAProps> = ({ pokemonList }) => {
 									/>
 								</div>
 								<span className="mt-1 capitalize font-medium underline">
-									01{index + 1}
+									0{index + 1}
 								</span>
 							</div>
 						))}
