@@ -31,8 +31,8 @@ const ListB: React.FC<ListBProps> = ({ pokemon }) => {
 	const [fontFamily, setFontFamily] = useState<'Inter' | 'Poppins'>('Inter');
 	const [headerSize, setHeaderSize] = useState(20);
 	const [paragraphSize, setParagraphSize] = useState(16);
-	const [bgColor, setBgColor] = useState('#FFFFFF'); // Default background color
-	const [fontColor, setFontColor] = useState('#000000'); // Default font color
+	const [bgColor, setBgColor] = useState('#FFFFFF');
+	const [fontColor, setFontColor] = useState('#000000');
 	const primaryType = pokemon.types[0].type.name;
 
 	useEffect(() => {
@@ -120,7 +120,7 @@ const ListB: React.FC<ListBProps> = ({ pokemon }) => {
 								borderImageSource:
 									'linear-gradient(90deg, #D4AF37 0%, #F3D27D 30%, #D4AF37 60%, #F3D27D 90%, #D4AF37 100%)',
 								borderImageSlice: 1,
-								backgroundColor: bgColor, // Use dynamic background color
+								backgroundColor: bgColor,
 							}}
 						>
 							{sprite && (
@@ -164,10 +164,11 @@ const ListB: React.FC<ListBProps> = ({ pokemon }) => {
 													className="h-6 w-6 rounded-full flex items-center justify-center border-2 border-black mb-1"
 													style={{ backgroundColor: typeColors[primaryType] }}
 												>
-													<img
+													<Image
 														src={typeIconSrc}
 														alt={primaryType}
-														className="h-3 w-3"
+														height={12}
+														width={12}
 													/>
 												</span>
 											))}

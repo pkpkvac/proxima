@@ -1,155 +1,191 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import Image from 'next/image';
 import { PokemonProfile } from '../../types';
-import { getRandomLorem } from '../../utils/randomLorem';
-import AudioPlayer from '../AudioPlayer';
 import { typeColors } from '@/utils/colorMap';
-import Button from '../Button';
+import { MdOutlineArrowDropDown, MdOutlineArrowDropUp } from 'react-icons/md';
+import { motion } from 'framer-motion';
+import AudioPlayer from '../AudioPlayer';
 
 type ListAProps = {
-	pokemon: PokemonProfile;
+	pokemonList: PokemonProfile[];
 };
 
-const ListA: React.FC<ListAProps> = ({ pokemon }) => {
-	const [isShiny, setIsShiny] = useState(false);
-	const [isFront, setIsFront] = useState(true);
-	const [loremTexts, setLoremTexts] = useState<string[]>([]);
-	const primaryType = pokemon.types[0].type.name;
+const ListA: React.FC<ListAProps> = ({ pokemonList }) => {
+	const [selectedPokemon, setSelectedPokemon] = useState<PokemonProfile | null>(
+		null,
+	);
+	const scrollRef = useRef<HTMLDivElement>(null);
 
-	useEffect(() => {
-		const texts = pokemon.movesDetails.map(() => getRandomLorem(10, 40));
-		setLoremTexts(texts);
-	}, [pokemon.movesDetails]);
+	const handlePokemonClick = (pokemon: PokemonProfile) => {
+		setSelectedPokemon(pokemon);
+		const audio = new Audio(
+			`https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/${pokemon.id}.ogg`,
+		);
+		audio.play();
+	};
 
-	const toggleShiny = () => setIsShiny(!isShiny);
-	const toggleFrontBack = () => setIsFront(!isFront);
+	const scrollUp = () => {
+		if (scrollRef.current) {
+			scrollRef.current.scrollBy({ top: -500, behavior: 'smooth' });
+		}
+	};
 
-	const sprite = isShiny
-		? isFront
-			? pokemon.sprites.front_shiny
-			: pokemon.sprites.back_shiny
-		: isFront
-			? pokemon.sprites.front_default
-			: pokemon.sprites.back_default;
-
-	const typeIconSrc = `/icons/${primaryType.toLowerCase()}.svg`;
+	const scrollDown = () => {
+		if (scrollRef.current) {
+			scrollRef.current.scrollBy({ top: 500, behavior: 'smooth' });
+		}
+	};
 
 	return (
-		<div>
+		<>
+			<div className="flex flex-col items-center">
+				<div className="text-white font-semibold text-4xl">Pokedex</div>
+				<div>
+					<Image
+						className=""
+						alt="logo"
+						src={'/pokedex.png'}
+						height={200}
+						width={200}
+					/>
+				</div>
+			</div>
 			<div
-				style={{
-					backgroundImage: `url('/background/${primaryType}.jpeg')`,
-					backgroundSize: 'cover',
-					backgroundPosition: 'center',
-				}}
-				className="border-8 rounded-md border-card w-[521px] shadow-lg mx-auto py-5"
+				ref={scrollRef}
+				className="relative w-full rounded-2xl border-[30px] border-red-400 bg-gradient-to-b from-[#128B87] to-[#4BE4DF] min-h-[900px] max-h-[900px] overflow-scroll mb-10"
 			>
-				<div className="px-[40px]">
-					<div className="flex justify-between items-center">
-						<h3 className="text-lg font-bold capitalize">{pokemon.name}</h3>
-						<div className="flex items-center">
-							<span className="text-lg font-bold text-red-500">100 HP</span>
-							<span className="ml-2 text-sm font-bold">
+				{!selectedPokemon && (
+					<div className="sticky top-0 z-20">
+						<div
+							style={{ background: '#128B87' }}
+							className="flex items-center justify-center"
+						>
+							<div
+								style={{
+									background: '#8AFBE8',
+								}}
+								className="w-full h-[1px] mt-2"
+							/>
+							<MdOutlineArrowDropUp
+								className="cursor-pointer z-30"
+								color="#8AFBE8"
+								size={50}
+								onClick={scrollUp}
+							/>
+							<div
+								style={{
+									background: '#8AFBE8',
+								}}
+								className="w-full h-[1px] mt-2"
+							/>
+						</div>
+					</div>
+				)}
+
+				{selectedPokemon ? (
+					<motion.div
+						initial={{ opacity: 0, y: 50 }}
+						animate={{ opacity: 1, y: 0 }}
+						transition={{ duration: 1 }}
+						className="flex flex-col items-center p-10"
+					>
+						<button
+							onClick={() => setSelectedPokemon(null)}
+							className="text-white mb-4 text-2xl "
+						>
+							Back
+						</button>
+						<div
+							className="flex flex-col items-center rounded-full p-8"
+							style={{
+								backgroundColor: typeColors[selectedPokemon.types[0].type.name],
+								height: 350,
+								width: 350,
+							}}
+						>
+							<Image
+								src={selectedPokemon.sprites.front_default}
+								alt={selectedPokemon.name}
+								width={300}
+								height={300}
+								className="rounded-full"
+							/>
+							<div className="-mt-10">
+								<AudioPlayer
+									url={`https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/${selectedPokemon.id}.ogg`}
+								/>
+							</div>
+						</div>
+						<h3 className="text-white text-2xl font-bold my-4 capitalize">
+							{selectedPokemon.name}
+						</h3>
+					</motion.div>
+				) : (
+					<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-4">
+						{pokemonList.map((pokemon, index) => (
+							<div
+								key={pokemon.id}
+								className="flex flex-col items-center cursor-pointer"
+								onClick={() => handlePokemonClick(pokemon)}
+							>
 								<div
-									className="h-8 w-8 rounded-full flex items-center justify-center border-2 border-black"
-									style={{ backgroundColor: typeColors[primaryType] }}
+									className="z-0 relative rounded-full flex items-center justify-center border-2 border-transparent"
+									style={{
+										backgroundColor: typeColors[pokemon.types[0].type.name],
+									}}
 								>
 									<Image
-										src={typeIconSrc}
-										alt={primaryType}
+										src={pokemon.sprites.front_default}
+										alt={pokemon.name}
+										width={150}
+										height={150}
+									/>
+									<Image
+										src={`/icons/${pokemon.types[0].type.name.toLowerCase()}.svg`}
+										alt={'type'}
 										height={16}
 										width={16}
+										className="absolute top-[8%] right-[24%]"
 									/>
 								</div>
-							</span>
-						</div>
-					</div>
-					<div
-						className="relative border-4 flex my-2"
-						style={{
-							justifyContent: 'center',
-							borderImageSource:
-								'linear-gradient(90deg, #D4AF37 0%, #F3D27D 30%, #D4AF37 60%, #F3D27D 90%, #D4AF37 100%)',
-							borderImageSlice: 1,
-							backgroundColor: typeColors[primaryType],
-						}}
-					>
-						{sprite && (
-							<Image
-								src={sprite}
-								alt={pokemon.name}
-								width={250}
-								height={300}
-								className="rounded-lg"
-							/>
-						)}
-						<div className="absolute bottom-2 right-2 cursor-pointer">
-							<AudioPlayer
-								url={`https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/${pokemon.id}.ogg`}
-							/>
-						</div>
-					</div>
-					<div className="text-sm flex justify-between capitalize px-5 bg-gold-gradient mx-5 py-1">
-						<span>{`${primaryType} Pokemon. Height: ${pokemon.height} feet, Weight: ${pokemon.weight} lbs.`}</span>
-					</div>
-					<div className="mt-4">
-						<h3 className="text-md font-bold">Moves</h3>
-						{pokemon.movesDetails.map((move, index) => (
-							<div
-								key={index}
-								className="flex mb-4 justify-between items-center"
-							>
-								<div className="flex items-center">
-									<div className="flex flex-col justify-center mr-4">
-										{Array.from({ length: index + 1 }).map((_, i) => (
-											<span
-												key={i}
-												className="h-6 w-6 rounded-full flex items-center justify-center border-2 border-black mb-1"
-												style={{ backgroundColor: typeColors[primaryType] }}
-											>
-												<img
-													src={typeIconSrc}
-													alt={primaryType}
-													className="h-3 w-3"
-												/>
-											</span>
-										))}
-									</div>
-									<div className="flex-1">
-										<span className="font-semibold capitalize text-lg">
-											{move.name.split('-').join(' ') + ' '}
-										</span>
-										<span className="normal-case text-md line-clamp-3">
-											{loremTexts[index]}
-										</span>
-									</div>
-								</div>
-								<div className="text-2xl ml-2">{move.power ?? 10}</div>
+								<span className="mt-1 capitalize font-medium underline">
+									01{index + 1}
+								</span>
 							</div>
 						))}
 					</div>
-				</div>
-			</div>
-			<div className="flex justify-between mt-4 gap-4">
-				{pokemon.sprites.back_default && (
-					<Button
-						onClick={toggleFrontBack}
-						className="px-7 py-3 w-full bg-gold-gradient font-bold text-black rounded"
-					>
-						{isFront ? 'Show Back' : 'Show Front'}
-					</Button>
 				)}
-				{pokemon.sprites.front_shiny && (
-					<Button
-						onClick={toggleShiny}
-						className="px-7 py-3 w-full bg-gold-gradient font-bold text-black rounded"
-					>
-						{isShiny ? 'Show Normal' : 'Show Shiny'}
-					</Button>
+
+				{!selectedPokemon && (
+					<div className="sticky bottom-0 z-20">
+						<div
+							style={{ background: '#128B87' }}
+							className="flex items-center justify-center"
+						>
+							<div
+								style={{
+									background: '#8AFBE8',
+								}}
+								className="w-full h-[1px] -mt-1"
+							/>
+							<MdOutlineArrowDropDown
+								className="cursor-pointer z-30"
+								color="#8AFBE8"
+								size={50}
+								onClick={scrollDown}
+							/>
+							<div
+								style={{
+									background: '#8AFBE8',
+								}}
+								className="w-full h-[1px] -mt-1"
+							/>
+						</div>
+					</div>
 				)}
 			</div>
-		</div>
+		</>
 	);
 };
 

@@ -19,10 +19,12 @@ const AudioPlayer = ({ url }: AudioPlayerProps) => {
 		<div>
 			<audio ref={audioRef}>
 				<source src={url} type="audio/ogg" />
-				Your browser does not support the audio element.
 			</audio>
 			<div>
-				<FaPlayCircle className="h-10 w-10" onClick={playAudio} />
+				<FaPlayCircle
+					className="h-10 w-10 cursor-pointer"
+					onClick={playAudio}
+				/>
 			</div>
 		</div>
 	);
