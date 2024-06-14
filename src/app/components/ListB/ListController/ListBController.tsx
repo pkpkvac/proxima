@@ -57,12 +57,12 @@ const ListBController: React.FC<ListBControllerProps> = ({
 
 	const headerSizeLimits = {
 		min: isSmallScreen ? 10 : 14,
-		max: isSmallScreen ? 20 : 44,
+		max: isSmallScreen ? 20 : 30,
 	};
 
 	const paragraphSizeLimits = {
 		min: isSmallScreen ? 8 : 12,
-		max: isSmallScreen ? 18 : 28,
+		max: isSmallScreen ? 18 : 24,
 	};
 
 	return (
