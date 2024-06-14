@@ -39,7 +39,7 @@ export default async function Home() {
 				width={400}
 			/>
 			<div className="flex flex-col ">
-				{/* <ListA pokemonList={randomPokemonProfiles} /> */}
+				<ListA pokemonList={randomPokemonProfiles} />
 				<ListB pokemon={randomPokemon} />
 			</div>
 		</div>

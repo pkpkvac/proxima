@@ -1,5 +1,5 @@
 'use client';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { SketchPicker, ColorResult } from 'react-color';
 import Button from '../../Button';
 import { PokemonProfile } from '@/app/types';
@@ -43,7 +43,17 @@ const ListBController: React.FC<ListBControllerProps> = ({
 	handleFontColorChange,
 	pokemon,
 }) => {
-	const isSmallScreen = window.matchMedia('(max-width: 639px)').matches;
+	const [isSmallScreen, setIsSmallScreen] = useState(false);
+
+	useEffect(() => {
+		const handleResize = () => {
+			setIsSmallScreen(window.matchMedia('(max-width: 639px)').matches);
+		};
+
+		handleResize(); // Set the initial value
+		window.addEventListener('resize', handleResize);
+		return () => window.removeEventListener('resize', handleResize);
+	}, []);
 
 	const headerSizeLimits = {
 		min: isSmallScreen ? 10 : 14,

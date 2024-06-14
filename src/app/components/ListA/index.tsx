@@ -4,8 +4,12 @@ import Image from 'next/image';
 import { PokemonProfile } from '../../types';
 import { typeColors } from '@/utils/colorMap';
 import { MdOutlineArrowDropDown, MdOutlineArrowDropUp } from 'react-icons/md';
-import { motion } from 'framer-motion';
-import AudioPlayer from '../AudioPlayer';
+import dynamic from 'next/dynamic';
+
+const SelectedPokemonDetails = dynamic(
+	() => import('./SelectedPokemonDetails'),
+	{ ssr: false },
+);
 
 type ListAProps = {
 	pokemonList: PokemonProfile[];
@@ -84,43 +88,10 @@ const ListA: React.FC<ListAProps> = ({ pokemonList }) => {
 				)}
 
 				{selectedPokemon ? (
-					<motion.div
-						initial={{ opacity: 0, y: 50 }}
-						animate={{ opacity: 1, y: 0 }}
-						transition={{ duration: 1 }}
-						className="flex flex-col items-center p-10"
-					>
-						<button
-							onClick={() => setSelectedPokemon(null)}
-							className="text-white mb-4 text-2xl "
-						>
-							Back
-						</button>
-						<div
-							className="flex flex-col items-center rounded-full p-8"
-							style={{
-								backgroundColor: typeColors[selectedPokemon.types[0].type.name],
-								height: 350,
-								width: 350,
-							}}
-						>
-							<Image
-								src={selectedPokemon.sprites.front_default}
-								alt={selectedPokemon.name}
-								width={300}
-								height={300}
-								className="rounded-full"
-							/>
-							<div className="-mt-10">
-								<AudioPlayer
-									url={`https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/${selectedPokemon.id}.ogg`}
-								/>
-							</div>
-						</div>
-						<h3 className="text-white text-2xl font-bold my-4 capitalize">
-							{selectedPokemon.name}
-						</h3>
-					</motion.div>
+					<SelectedPokemonDetails
+						pokemon={selectedPokemon}
+						onBack={() => setSelectedPokemon(null)}
+					/>
 				) : (
 					<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-4">
 						{pokemonList.map((pokemon, index) => (
