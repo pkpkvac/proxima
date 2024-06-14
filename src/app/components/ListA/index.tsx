@@ -4,6 +4,8 @@ import Image from "next/image";
 import { PokemonProfile } from "../../types";
 import { getRandomLorem } from "../../utils/randomLorem";
 import AudioPlayer from "../AudioPlayer";
+import { typeColors } from "@/utils/colorMap";
+import Button from "../Button";
 
 type ListAProps = {
   pokemon: PokemonProfile;
@@ -31,22 +33,6 @@ const ListA: React.FC<ListAProps> = ({ pokemon }) => {
     ? pokemon.sprites.front_default
     : pokemon.sprites.back_default;
 
-  const typeColors: { [key: string]: string } = {
-    fire: "#F08030",
-    water: "#6890F0",
-    ground: "#E0C068",
-    psychic: "#F85888",
-    bug: "#A8B820",
-    poison: "#A040A0",
-    rock: "#B8A038",
-    normal: "#A8A878",
-    electric: "#F8D030",
-    fighting: "#C03028",
-    grass: "#78C850",
-    fairy: "#EE99AC",
-    ghost: "#705898",
-  };
-
   const typeIconSrc = `/icons/${primaryType.toLowerCase()}.svg`;
 
   return (
@@ -69,10 +55,11 @@ const ListA: React.FC<ListAProps> = ({ pokemon }) => {
                   className="h-8 w-8 rounded-full flex items-center justify-center border-2 border-black"
                   style={{ backgroundColor: typeColors[primaryType] }}
                 >
-                  <img
+                  <Image
                     src={typeIconSrc}
                     alt={primaryType}
-                    className="h-4 w-4"
+                    height={16}
+                    width={16}
                   />
                 </div>
               </span>
@@ -97,7 +84,7 @@ const ListA: React.FC<ListAProps> = ({ pokemon }) => {
                 className="rounded-lg"
               />
             )}
-            <div className="absolute bottom-2 right-2">
+            <div className="absolute bottom-2 right-2 cursor-pointer">
               <AudioPlayer
                 url={`https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/${pokemon.id}.ogg`}
               />
@@ -107,7 +94,7 @@ const ListA: React.FC<ListAProps> = ({ pokemon }) => {
             <span>{`${primaryType} Pokemon. Height: ${pokemon.height} feet, Weight: ${pokemon.weight} lbs.`}</span>
           </div>
           <div className="mt-4">
-            <h4 className="text-md font-bold">Moves</h4>
+            <h3 className="text-md font-bold">Moves</h3>
             {pokemon.movesDetails.map((move, index) => (
               <div
                 key={index}
@@ -144,19 +131,23 @@ const ListA: React.FC<ListAProps> = ({ pokemon }) => {
           </div>
         </div>
       </div>
-      <div className="flex justify-between mt-4">
-        <button
-          onClick={toggleFrontBack}
-          className="px-2 py-1 bg-blue-500 text-white rounded"
-        >
-          {isFront ? "Show Back" : "Show Front"}
-        </button>
-        <button
-          onClick={toggleShiny}
-          className="px-2 py-1 bg-green-500 text-white rounded"
-        >
-          {isShiny ? "Show Normal" : "Show Shiny"}
-        </button>
+      <div className="flex justify-between mt-4 gap-4">
+        {pokemon.sprites.back_default && (
+          <Button
+            onClick={toggleFrontBack}
+            className="px-7 py-3 w-full bg-gold-gradient font-bold text-black rounded"
+          >
+            {isFront ? "Show Back" : "Show Front"}
+          </Button>
+        )}
+        {pokemon.sprites.front_shiny && (
+          <Button
+            onClick={toggleShiny}
+            className="px-7 py-3 w-full bg-gold-gradient font-bold text-black rounded"
+          >
+            {isShiny ? "Show Normal" : "Show Shiny"}
+          </Button>
+        )}
       </div>
     </div>
   );
