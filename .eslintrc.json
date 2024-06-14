@@ -1,8 +1,7 @@
 {
-	"extends": "next/core-web-vitals",
-  	"rules": {
-    	"indent": ["error", "tab", { "SwitchCase": 1 }],
-    	"react-hooks/exhaustive-deps": "off"
-  	}
+  "extends": "next/core-web-vitals",
+  "rules": {
+    "indent": ["error", "tab", { "SwitchCase": 1 }],
+    "react-hooks/exhaustive-deps": "off"
+  }
 }
-

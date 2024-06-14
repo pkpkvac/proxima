@@ -1,9 +1,11 @@
 # Overview
+
 In our platform, we value the ability to offer significant customization options to our clients, allowing them to tailor the frontend to their specific needs and preferences. To align with this philosophy, we have designed a coding challenge that tests your ability to create highly customizable React components.
 
 Your task is to develop two distinct React list components, ListA and ListB, each with a unique set of customizable features. These components should demonstrate your skills in creating versatile, user-friendly, and aesthetically pleasing UI elements using TypeScript, React, and CSS. The challenge is designed to assess your ability to implement functionality that meets our clients' diverse requirements while maintaining a high standard of code quality and design integrity.
 
 ## Key Objectives
+
 - **List Components:** Develop two components, ListA and ListB, each showcasing a unique list item.
   - **ListA** should feature a mix of text and images, including titles, descriptions, and images. You have the freedom to decide on the content's specifics, ensuring it's engaging and informative.
   - **ListB** allows for more creativity in content and structure. Design it to be versatile and open-ended.
@@ -21,6 +23,7 @@ Your task is to develop two distinct React list components, ListA and ListB, eac
 - **Documentation and Comments:** Provide essential comments and documentation to explain your design decisions and any unique coding solutions you've applied.
 
 ## Evaluation Criteria
+
 - **Code Quality:** The clarity, organization, and efficiency of your code.
 - **Design and Creativity:** The visual appeal and innovative design solutions of the components.
 - **Responsiveness and Layout:** How effectively the side-by-side layout functions and adapts to various devices.
